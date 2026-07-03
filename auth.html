@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeNet - Authenticate</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="auth-body">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="logo">
+          <i class="fa-solid fa-share-nodes logo-icon animate-pulse"></i>
+          <h1>VibeNet</h1>
+        </div>
+        <p class="subtitle">Connect. Share. Inspire.</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Log In</button>
+        <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Sign Up</button>
+      </div>
+
+      <div class="auth-alert hidden" id="auth-alert">
+        <span class="alert-message">Error message goes here</span>
+        <button class="alert-close" onclick="closeAlert()">&times;</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="login-username"><i class="fa-solid fa-user"></i> Username or Email</label>
+          <input type="text" id="login-username" placeholder="Enter your username or email" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="login-password"><i class="fa-solid fa-lock"></i> Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="login-password" placeholder="Enter your password" required autocomplete="current-password">
+            <i class="fa-solid fa-eye-slash toggle-password" onclick="togglePasswordVisibility('login-password', this)"></i>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-glowing">
+          <span>Log In</span> <i class="fa-solid fa-right-to-bracket"></i>
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form hidden" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label for="register-username"><i class="fa-solid fa-user-tag"></i> Username</label>
+          <input type="text" id="register-username" placeholder="e.g. johndoe" required minlength="3" maxlength="20" pattern="^[a-zA-Z0-9_]+$" title="Username can only contain letters, numbers, and underscores.">
+        </div>
+        <div class="form-group">
+          <label for="register-email"><i class="fa-solid fa-envelope"></i> Email Address</label>
+          <input type="email" id="register-email" placeholder="e.g. john@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="register-password"><i class="fa-solid fa-lock"></i> Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="register-password" placeholder="Min. 6 characters" required minlength="6">
+            <i class="fa-solid fa-eye-slash toggle-password" onclick="togglePasswordVisibility('register-password', this)"></i>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-glowing">
+          <span>Create Account</span> <i class="fa-solid fa-user-plus"></i>
+        </button>
+      </form>
+      
+      <div class="auth-footer">
+        <p>By joining, you agree to connect responsibly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

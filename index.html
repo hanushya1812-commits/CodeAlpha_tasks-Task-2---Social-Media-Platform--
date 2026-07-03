@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeNet - Feed</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="app-body">
+  <div class="app-layout">
+    <!-- 1. LEFT SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fa-solid fa-share-nodes logo-icon"></i>
+          <span class="logo-text">VibeNet</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#/home" class="nav-item active" id="nav-home">
+          <i class="fa-solid fa-house"></i> <span>Home Feed</span>
+        </a>
+        <a href="#/explore" class="nav-item" id="nav-explore">
+          <i class="fa-solid fa-compass"></i> <span>Explore</span>
+        </a>
+        <a href="#/profile" class="nav-item" id="nav-profile-link">
+          <i class="fa-solid fa-user"></i> <span>My Profile</span>
+        </a>
+        <button class="btn btn-primary create-post-btn" onclick="focusComposer()">
+          <i class="fa-solid fa-pen-nib"></i> <span>Create Vibe</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-pill" onclick="navigateToOwnProfile()">
+          <img src="" alt="Avatar" id="sidebar-user-avatar" class="avatar-sm">
+          <div class="user-pill-info">
+            <span class="user-pill-username" id="sidebar-user-username">Username</span>
+            <span class="user-pill-handle" id="sidebar-user-handle">@handle</span>
+          </div>
+        </div>
+        <button class="logout-btn" onclick="triggerLogout()" title="Log Out">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- 2. MAIN FEED COLUMN -->
+    <main class="main-content">
+      <!-- Top header bar for mobile -->
+      <header class="mobile-header">
+        <div class="logo">
+          <i class="fa-solid fa-share-nodes logo-icon"></i>
+          <span>VibeNet</span>
+        </div>
+        <button class="logout-btn" onclick="triggerLogout()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </header>
+
+      <!-- FEED PAGE -->
+      <section id="page-feed" class="page-view">
+        <div class="feed-header">
+          <h2 id="feed-title">Home Feed</h2>
+        </div>
+
+        <!-- Composer Card -->
+        <div class="composer-card" id="composer-card">
+          <div class="composer-body">
+            <img src="" alt="Avatar" class="avatar-md" id="composer-avatar">
+            <div class="composer-input-wrapper">
+              <textarea id="post-content-input" placeholder="What's vibing today? Share your thoughts..." maxlength="500" oninput="updateCharCount()"></textarea>
+              <!-- Optional image preview -->
+              <div id="image-preview-container" class="image-preview-container hidden">
+                <img src="" alt="Post image preview" id="image-preview">
+                <button class="remove-preview-btn" onclick="removeImageLink()">&times;</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="composer-attachments">
+            <div class="attachment-trigger" onclick="toggleImageInput()">
+              <i class="fa-regular fa-image"></i> <span>Add Image URL</span>
+            </div>
+            <div id="image-url-input-container" class="image-url-input-container hidden">
+              <input type="url" id="post-image-url" placeholder="Paste image address (https://...)" onchange="previewPostImage()">
+            </div>
+          </div>
+
+          <div class="composer-footer">
+            <span class="char-counter" id="char-counter">0 / 500</span>
+            <button class="btn btn-primary btn-sm" onclick="triggerCreatePost()">Publish Vibe</button>
+          </div>
+        </div>
+
+        <!-- Feed list -->
+        <div class="posts-container" id="posts-feed-container">
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading vibes...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROFILE PAGE -->
+      <section id="page-profile" class="page-view hidden">
+        <div class="profile-header-card">
+          <div class="profile-cover"></div>
+          <div class="profile-meta">
+            <div class="profile-avatar-row">
+              <img src="" alt="Profile avatar" class="avatar-lg" id="profile-avatar">
+              <div class="profile-action-btn-container">
+                <button class="btn btn-outline btn-sm hidden" id="edit-profile-btn" onclick="openEditProfileModal()">Edit Profile</button>
+                <button class="btn btn-primary btn-sm hidden" id="follow-profile-btn" onclick="triggerFollowProfileUser()">Follow</button>
+              </div>
+            </div>
+            <div class="profile-identity">
+              <h2 id="profile-display-name">Display Name</h2>
+              <p class="profile-handle" id="profile-display-handle">@username</p>
+              <p class="profile-bio" id="profile-display-bio">This is the profile bio. Add something beautiful here!</p>
+              <p class="profile-join-date"><i class="fa-regular fa-calendar-days"></i> Joined <span id="profile-display-joined">July 2026</span></p>
+            </div>
+            
+            <div class="profile-stats">
+              <div class="stat-item">
+                <span class="stat-num" id="profile-stat-posts">0</span>
+                <span class="stat-label">Vibes</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-num" id="profile-stat-followers">0</span>
+                <span class="stat-label">Followers</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-num" id="profile-stat-following">0</span>
+                <span class="stat-label">Following</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-feed-section">
+          <h3>Vibes published</h3>
+          <div class="posts-container" id="profile-posts-container">
+            <!-- User posts render here -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 3. RIGHT WIDGETS COLUMN -->
+    <aside class="right-column">
+      <!-- Search Widget -->
+      <div class="widget search-widget">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-users-input" placeholder="Search profiles..." oninput="handleSearchUsers()">
+        </div>
+        <div id="search-results-dropdown" class="search-results-dropdown hidden">
+          <!-- Live search user results -->
+        </div>
+      </div>
+
+      <!-- Who to Follow Widget -->
+      <div class="widget suggestions-widget">
+        <h3>Who to Follow</h3>
+        <div class="suggestions-list" id="suggestions-list-container">
+          <!-- Suggested users rendered here -->
+          <div class="loading-state-sm">
+            <div class="spinner-sm"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trending/Info Widget -->
+      <div class="widget info-widget">
+        <h3>App Status</h3>
+        <ul class="app-info-list">
+          <li><strong>Platform:</strong> VibeNet Web v1.0</li>
+          <li><strong>Database:</strong> Connected</li>
+          <li><strong>OS Sandbox:</strong> Active</li>
+        </ul>
+        <footer class="app-credits">
+          <p>&copy; 2026 VibeNet Inc.</p>
+        </footer>
+      </div>
+    </aside>
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div class="modal-backdrop hidden" id="edit-profile-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Edit Profile</h3>
+        <button class="modal-close-btn" onclick="closeEditProfileModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-profile-form" onsubmit="triggerSaveProfile(event)">
+          <div class="form-group">
+            <label>Select Avatar</label>
+            <div class="avatar-selector-grid">
+              <div class="avatar-option" data-avatar="avatar1" onclick="selectAvatarOption('avatar1')">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Felix" alt="Avatar 1">
+              </div>
+              <div class="avatar-option" data-avatar="avatar2" onclick="selectAvatarOption('avatar2')">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Aneka" alt="Avatar 2">
+              </div>
+              <div class="avatar-option" data-avatar="avatar3" onclick="selectAvatarOption('avatar3')">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Jack" alt="Avatar 3">
+              </div>
+              <div class="avatar-option" data-avatar="avatar4" onclick="selectAvatarOption('avatar4')">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Buster" alt="Avatar 4">
+              </div>
+              <div class="avatar-option" data-avatar="avatar5" onclick="selectAvatarOption('avatar5')">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Cody" alt="Avatar 5">
+              </div>
+              <div class="avatar-option" data-avatar="avatar6" onclick="selectAvatarOption('avatar6')">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Luna" alt="Avatar 6">
+              </div>
+            </div>
+            <input type="hidden" id="edit-profile-avatar-value">
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-profile-bio-input">Bio</label>
+            <textarea id="edit-profile-bio-input" placeholder="Tell us about yourself..." maxlength="160"></textarea>
+            <span class="char-counter-sm" id="bio-char-counter">0 / 160</span>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="closeEditProfileModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Mobile Nav Bar -->
+  <nav class="mobile-nav-bar">
+    <a href="#/home" class="mobile-nav-item active" id="mob-nav-home">
+      <i class="fa-solid fa-house"></i>
+    </a>
+    <a href="#/explore" class="mobile-nav-item" id="mob-nav-explore">
+      <i class="fa-solid fa-compass"></i>
+    </a>
+    <a href="#/profile" class="mobile-nav-item" id="mob-nav-profile">
+      <i class="fa-solid fa-user"></i>
+    </a>
+  </nav>
+
+  <!-- Custom Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
